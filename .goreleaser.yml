@@ -7,6 +7,6 @@ builds:
       - windows
 
 archives:
-  format_overrides:
-    - goos: windows
-      format: zip
+  - format_overrides:
+      - goos: windows
+        format: zip
