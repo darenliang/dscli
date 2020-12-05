@@ -71,15 +71,14 @@ dscli rm <remote file>
 
 Ubuntu 18.04.5 LTS on Gigabit internet
 
-```
-dscli up 100MB.bin
+|                 | 10 MB         | 100 MB        | 1000 MB       |
+| --------------- | ------------- | ------------- | ------------- |
+| Upload          | 18.161 MB/s   | 7.760 MB/s    | 6.352 MB/s    |
+| Download (cold) | 23.878 MB/s   | 32.895 MB/s   | 32.976 MB/s   |
+| Download (warm) | 57.061 MB/s   | 74.972 MB/s   | 75.638 MB/s   |
 
-Uploading 100MB.bin 100% |███████████████████████████| (100/100 MB, 7.509 MB/s)
-
-dscli dl 100MB.bin
-
-Downloading 100MB.bin 100% |████████████████████████| (100/100 MB, 14.710 MB/s)
-```
+* cold: Initial download
+* warm: Later downloads
 
 ## Limitations
 
