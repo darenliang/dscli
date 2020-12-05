@@ -15,7 +15,7 @@ import (
 
 // upCmd represents the up command
 var upCmd = &cobra.Command{
-	Use:        "up local remote",
+	Use:        "up <local file> <remote file>",
 	Example:    "up test.txt test.txt",
 	SuggestFor: []string{"upload"},
 	Short:      "Upload file",

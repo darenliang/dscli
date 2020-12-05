@@ -13,7 +13,7 @@ import (
 
 // dlCmd represents the dl command
 var dlCmd = &cobra.Command{
-	Use:        "dl remote local",
+	Use:        "dl <remote file> <local file>",
 	Example:    "dl test.txt test.txt",
 	SuggestFor: []string{"download"},
 	Short:      "Download file",

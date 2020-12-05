@@ -8,7 +8,7 @@ import (
 
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
-	Use:        "rm file",
+	Use:        "rm <remote file>",
 	Example:    "rm example.txt",
 	SuggestFor: []string{"remove", "delete"},
 	Short:      "Remove file",

@@ -8,7 +8,7 @@ import (
 
 // mvCmd represents the mv command
 var mvCmd = &cobra.Command{
-	Use:        "mv source dest",
+	Use:        "mv <source file> <destination file>",
 	Example:    "mv old_file.txt new_file.txt",
 	SuggestFor: []string{"move", "rename"},
 	Short:      "Move file",

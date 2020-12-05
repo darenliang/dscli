@@ -3,69 +3,71 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/darenliang/dscli)](https://goreportcard.com/report/github.com/darenliang/dscli)
 [![License](https://img.shields.io/github/license/darenliang/dscli)](https://github.com/nikel-api/nikel/blob/master/LICENSE)
 
-Dscli stands for Discord store CLI and provides a way to store files with no size restrictions.
+Dscli (Discord store CLI) provides a way to store files with no size restrictions.
 
-### Discord Requirements
+## Discord Requirements
 
 * Empty Discord server
 * Invited Discord bot that has permissions to manage servers
 * You'll need the Discord bot token and the server id
 
-### Installation
+## Installation
 
 Make sure you have go installed (version 1.13+ is required).
 ```
 go get -u github.com/darenliang/dscli
 ```
 
-### Quickstart
+## Quickstart
 
 A complete setup guide can be found at:
 ```
 dscli quickstart
 ```
 
-### Examples
+## Commands
 
-Configure application
+#### Configure application
 ```
 dscli config
 ```
 
-List files
+#### List files
 ```
 dscli ls
-
-test.txt
-test.mp3
-test.mp4
 ```
 
-Upload file
+#### Upload file
+Use local filename
 ```
-dscli up foo.txt
-
-Uploading foo.txt 100% |███████████████████████████████████| (1/1 MB, 2.5 MB/s)
+dscli up <local file>
 ```
-
-Download file
+Specify remote filename
 ```
-$ dscli dl foo.txt
-
-Downloading bar.txt 100% |█████████████████████████████████| (1/1 MB, 5.0 MB/s)
+dscli up <local file> <remote file>
 ```
 
-Move file
+#### Download file
+Use remote filename
 ```
-dscli mv foo.txt bar.txt
+dscli dl <remote file>
+```
+Specify local filename
+```
+dscli dl <remote file> <local file>
 ```
 
-Remove file
+#### Move file
 ```
-dscli rm foo.txt
+dscli mv <source file> <destination file>
 ```
 
-### Quick Benchmarks
+#### Remove file
+```
+dscli rm <remote file>
+```
+
+## Quick Benchmarks
 
 Ubuntu 18.04.5 LTS on Gigabit internet
 
@@ -79,7 +81,7 @@ dscli dl 100MB.bin
 Downloading 100MB.bin 100% |████████████████████████| (100/100 MB, 14.710 MB/s)
 ```
 
-### Limitations
+## Limitations
 
 * No folders
 * Limited filename lengths
@@ -87,6 +89,6 @@ Downloading 100MB.bin 100% |█████████████████�
 * File number limit of 500
 * Subject to Discord rate limits
 
-### License
+## License
 
 [MIT](https://github.com/darenliang/dscli/blob/master/LICENSE)
