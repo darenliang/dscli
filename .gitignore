@@ -1,0 +1,6 @@
+# Jetbrains files
+.idea/
+
+# Binaries
+dscli.exe
+dscli
