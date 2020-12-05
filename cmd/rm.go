@@ -48,7 +48,7 @@ func rm(cmd *cobra.Command, args []string) error {
 			return errors.New("cannot delete file: " + err.Error())
 		}
 		return nil
-	} else {
-		return errors.New(filename + " not found")
 	}
+
+	return errors.New(filename + " not found")
 }

@@ -59,7 +59,7 @@ func mv(cmd *cobra.Command, args []string) error {
 			return errors.New("cannot move file: " + err.Error())
 		}
 		return nil
-	} else {
-		return errors.New(oldFilename + " not found")
 	}
+
+	return errors.New(oldFilename + " not found")
 }
