@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"io"
 	"os"
-	"path"
+	"path/filepath"
 	"strconv"
 )
 
@@ -89,10 +89,12 @@ func up(cmd *cobra.Command, args []string) error {
 	size := stat.Size()
 	sizeStr := strconv.Itoa(int(size))
 
+	_, localBase := filepath.Split(local)
+
 	// init progress bar
 	bar := progressbar.DefaultBytes(
 		size,
-		"Uploading "+path.Base(local),
+		"Uploading "+localBase,
 	)
 
 	for {
