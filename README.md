@@ -45,14 +45,14 @@ Upload file
 ```
 dscli up foo.txt
 
-Uploading foo.txt 100% |███████| (1/1 MB, 2.5 MB/s)
+Uploading foo.txt 100% |███████████████████████████████████| (1/1 MB, 2.5 MB/s)
 ```
 
 Download file
 ```
 $ dscli dl foo.txt
 
-Downloading bar.txt 100% |███████| (1/1 MB, 5.0 MB/s)
+Downloading bar.txt 100% |█████████████████████████████████| (1/1 MB, 5.0 MB/s)
 ```
 
 Move file
@@ -63,6 +63,20 @@ dscli mv foo.txt bar.txt
 Remove file
 ```
 dscli rm foo.txt
+```
+
+### Quick Benchmarks
+
+Ubuntu 18.04.5 LTS on Gigabit internet
+
+```
+dscli up 100MB.bin
+
+Uploading 100MB.bin 100% |███████████████████████████| (100/100 MB, 7.509 MB/s)
+
+dscli dl 100MB.bin
+
+Downloading 100MB.bin 100% |████████████████████████| (100/100 MB, 14.710 MB/s)
 ```
 
 ### Limitations
