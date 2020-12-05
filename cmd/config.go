@@ -1,14 +1,21 @@
 package cmd
 
 import (
+	"bufio"
+	"fmt"
 	"github.com/darenliang/dscli/common"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
+	"strings"
 )
 
-var botToken string
-var serverID string
+var (
+	botToken string
+	serverID string
+	delete   bool
+)
 
 // configCmd represents the config command
 var configCmd = &cobra.Command{
@@ -20,6 +27,7 @@ var configCmd = &cobra.Command{
 func init() {
 	configCmd.Flags().StringVarP(&botToken, "token", "t", "", "Discord bot token")
 	configCmd.Flags().StringVarP(&serverID, "id", "i", "", "Discord server id to upload files")
+	configCmd.Flags().BoolVarP(&delete, "delete", "d", false, "delete channels from server")
 
 	rootCmd.AddCommand(configCmd)
 }
@@ -49,6 +57,49 @@ The server ID will be used to write files to a Discord server.`,
 	if err != nil {
 		return err
 	}
+
+	deleteFlag, err := cmd.Flags().GetBool("delete")
+	if err != nil {
+		return err
+	}
+
+	// get input if any of the other flags aren't set
+	if cmd.Flag("token").Value.String() == "" || cmd.Flag("id").Value.String() == "" {
+		deleteFlag = false
+		fmt.Println("The server must have no existing channels when you first dscli.")
+		fmt.Println()
+		color.New(color.FgYellow, color.Bold).Print("Delete all channels in server? [y/N]: ")
+		reader := bufio.NewReader(os.Stdin)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return err
+		}
+		choice := strings.ToLower(strings.TrimSpace(input))
+		fmt.Println()
+		if choice == "y" || choice == "yes" {
+			deleteFlag = true
+		}
+	}
+
+	if deleteFlag {
+		session, _, channels, err := common.GetDiscordSession()
+		if err != nil {
+			return err
+		}
+
+		for _, channel := range channels {
+			_, err := session.ChannelDelete(channel.ID)
+			if err != nil {
+				return err
+			}
+		}
+
+		color.Green("All channels deleted")
+	} else {
+		color.Yellow(`Channels are not deleted.
+Note that you must delete all channels before you can start using dscli.`)
+	}
+	fmt.Println()
 
 	// write config
 	if viper.SafeWriteConfig() != nil {

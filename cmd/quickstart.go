@@ -30,25 +30,32 @@ Repo: https://github.com/darenliang/dscli`)
  - Copy the token by clicking on "Copy"
  - Save this token somewhere safe`)
 		fmt.Println()
-		header.Println("Step 2: Enable developer mode")
+		header.Println("Step 2: Invite bot")
+		fmt.Println(` - Visit this page: https://discord.com/developers/applications
+ - Go to "OAuth2"
+ - In the "Scopes" section, select "bot"
+ - At the bottom in "Bot Permissions", select "Administrator"
+ - Visit the link generated and add the bot to the server`)
+		fmt.Println()
+		header.Println("Step 3: Enable developer mode")
 		fmt.Println(` - Go to the Discord client or https://discord.com/app
  - Click on the gear icon to open settings
  - Click on "Appearance"
  - Toggle "Developer Mode" to on`)
 		fmt.Println()
-		header.Println("Step 3: Create a Discord server and get a server id")
+		header.Println("Step 4: Create a Discord server and get a server id")
 		fmt.Println(` - Go to the Discord client or https://discord.com/app
  - Click on the plus icon on the left panel
  - Click on "Create My Own"
  - Right click server icon on the left panel
  - Click "Copy ID"
- - Save this id somewhere
- - Optional: Remove the general text channel in the server you created`)
+ - Save this id somewhere`)
 		fmt.Println()
-		header.Println("Step 4: Configure dscli")
+		header.Println("Step 5: Configure dscli")
 		fmt.Println(` - Run "dscli configure" from command-line ("dscli.exe configure" on Windows)
  - Provide Discord bot token you saved
- - Provide server id you saved`)
+ - Provide server id you saved
+ - Say "yes" to deleting all channels in the server`)
 		fmt.Println()
 		color.New(color.FgGreen, color.Bold).Println("You are ready to use dscli!")
 	},
