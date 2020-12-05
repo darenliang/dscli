@@ -66,10 +66,9 @@ func dl(cmd *cobra.Command, args []string) error {
 	defer localFile.Close()
 
 	var msgs []*discordgo.Message
-	var currMsgID = "0"
-
-	first := true
 	var bar *progressbar.ProgressBar
+	currMsgID := "0"
+	first := true
 
 	// do-while
 	for ok := true; ok; ok = len(msgs) == common.MaxDiscordMessageRequest {

@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	botToken string
-	serverID string
-	delete   bool
+	botToken       string
+	serverID       string
+	deleteChannels bool
 )
 
 // configCmd represents the config command
@@ -27,7 +27,7 @@ var configCmd = &cobra.Command{
 func init() {
 	configCmd.Flags().StringVarP(&botToken, "token", "t", "", "Discord bot token")
 	configCmd.Flags().StringVarP(&serverID, "id", "i", "", "Discord server id to upload files")
-	configCmd.Flags().BoolVarP(&delete, "delete", "d", false, "delete channels from server")
+	configCmd.Flags().BoolVarP(&deleteChannels, "delete", "d", false, "delete channels from server")
 
 	rootCmd.AddCommand(configCmd)
 }
@@ -58,14 +58,9 @@ The server ID will be used to write files to a Discord server.`,
 		return err
 	}
 
-	deleteFlag, err := cmd.Flags().GetBool("delete")
-	if err != nil {
-		return err
-	}
-
 	// get input if any of the other flags aren't set
 	if cmd.Flag("token").Value.String() == "" || cmd.Flag("id").Value.String() == "" {
-		deleteFlag = false
+		deleteChannels = false
 		fmt.Println("The server must have no existing channels when you first dscli.")
 		fmt.Println()
 		color.New(color.FgYellow, color.Bold).Print("Delete all channels in server? [y/N]: ")
@@ -77,11 +72,11 @@ The server ID will be used to write files to a Discord server.`,
 		choice := strings.ToLower(strings.TrimSpace(input))
 		fmt.Println()
 		if choice == "y" || choice == "yes" {
-			deleteFlag = true
+			deleteChannels = true
 		}
 	}
 
-	if deleteFlag {
+	if deleteChannels {
 		session, _, channels, err := common.GetDiscordSession()
 		if err != nil {
 			return err
