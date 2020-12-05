@@ -84,9 +84,12 @@ Ubuntu 18.04.5 LTS on Gigabit internet
 
 * No folders
 * Limited filename lengths
+    * Filenames are encoded in base32
+    * Base32 strings cannot be longer than 100 characters
 * No file appending or editing
-* File number limit of 500
-* Subject to Discord rate limits
+* File number limit of 500 (max number of channels)
+* Subject to Discord rate limits (5 anything per 5 seconds per server)
+    * 8 MB x 5 / 5s = 8 MB/s (theoretical sustained upload speed)
 
 ## License
 
