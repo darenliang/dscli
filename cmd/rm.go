@@ -27,8 +27,6 @@ func init() {
 
 // rm command handler
 func rm(cmd *cobra.Command, args []string) error {
-	filename := args[0]
-
 	session, _, channels, err := common.GetDiscordSession()
 	if err != nil {
 		return err
@@ -39,6 +37,8 @@ func rm(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	filename := args[0]
 
 	// old file exists
 	if channel, ok := fileMap[filename]; ok {

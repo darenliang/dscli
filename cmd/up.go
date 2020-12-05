@@ -34,15 +34,6 @@ func init() {
 
 // up command handler
 func up(cmd *cobra.Command, args []string) error {
-	local := args[0] // local filename
-
-	var remote string // remote filename
-	if len(args) == 1 {
-		remote = local
-	} else {
-		remote = args[1]
-	}
-
 	session, guild, channels, err := common.GetDiscordSession()
 	if err != nil {
 		return err
@@ -52,6 +43,24 @@ func up(cmd *cobra.Command, args []string) error {
 	fileMap, err := common.ParseFileMap(channels)
 	if err != nil {
 		return err
+	}
+
+	local := args[0] // local filename
+
+	// open local file to upload
+	localFile, err := os.Open(local)
+	if err != nil {
+		return err
+	}
+	defer localFile.Close()
+
+	_, localBase := filepath.Split(local)
+
+	var remote string // remote filename
+	if len(args) == 1 {
+		remote = localBase
+	} else {
+		remote = args[1]
 	}
 
 	// remote filename already exists
@@ -74,13 +83,6 @@ func up(cmd *cobra.Command, args []string) error {
 	// setup buffer with max discord file size
 	buf := make([]byte, common.MaxDiscordFileSize)
 
-	// open local file to upload
-	localFile, err := os.Open(local)
-	if err != nil {
-		return err
-	}
-	defer localFile.Close()
-
 	// get size of local file
 	stat, err := localFile.Stat()
 	if err != nil {
@@ -88,8 +90,6 @@ func up(cmd *cobra.Command, args []string) error {
 	}
 	size := stat.Size()
 	sizeStr := strconv.Itoa(int(size))
-
-	_, localBase := filepath.Split(local)
 
 	// init progress bar
 	bar := progressbar.DefaultBytes(

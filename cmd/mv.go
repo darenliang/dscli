@@ -27,15 +27,6 @@ func init() {
 
 // mv command handler
 func mv(cmd *cobra.Command, args []string) error {
-	oldFilename := args[0] // old filename
-	newFilename := args[1] // new filename
-
-	// encode new filename
-	encodedNewFilename, err := common.EncodeFilename(newFilename)
-	if err != nil {
-		return err
-	}
-
 	session, _, channels, err := common.GetDiscordSession()
 	if err != nil {
 		return err
@@ -43,6 +34,15 @@ func mv(cmd *cobra.Command, args []string) error {
 	defer session.Close()
 
 	fileMap, err := common.ParseFileMap(channels)
+	if err != nil {
+		return err
+	}
+
+	oldFilename := args[0] // old filename
+	newFilename := args[1] // new filename
+
+	// encode new filename
+	encodedNewFilename, err := common.EncodeFilename(newFilename)
 	if err != nil {
 		return err
 	}
