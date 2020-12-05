@@ -8,13 +8,19 @@ Dscli stands for Discord store CLI and provides a way to store files with no siz
 ### Installation
 
 Make sure you have go installed (version 1.13+ is required).
-
 ```
 go get -u github.com/darenliang/dscli
 ```
 
+### Initial Setup
+
+* Empty Discord server
+* Invited Discord bot that has permissions to manage servers
+* You'll need the Discord bot token and the server id
+
 ### Quickstart
 
+A complete setup guide can be found at:
 ```
 dscli quickstart
 ```
@@ -22,7 +28,6 @@ dscli quickstart
 ### Examples
 
 Configure application
-
 ```
 dscli config
 ```
