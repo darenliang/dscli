@@ -20,7 +20,7 @@ go get -u github.com/darenliang/dscli
 
 ## Quickstart
 
-A complete setup guide can be found at:
+A complete setup guide can be found [here](https://github.com/darenliang/dscli/blob/master/quickstart/README.md).
 ```
 dscli quickstart
 ```
