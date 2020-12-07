@@ -1,63 +1,16 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/fatih/color"
-
+	"github.com/pkg/browser"
 	"github.com/spf13/cobra"
 )
-
-var header = color.New(color.FgYellow, color.Bold, color.Underline)
 
 // quickstartCmd represents the quickstart command
 var quickstartCmd = &cobra.Command{
 	Use:   "quickstart",
 	Short: "A short quickstart guide on how to use dscli",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(`Welcome to the dscli quickstart guide!
-
-Author: Daren Liang <daren@darenliang.com>
-Repo: https://github.com/darenliang/dscli`)
-		fmt.Println()
-		header.Println("Step 1: Create a Discord bot and get a token")
-		fmt.Println(` - Visit this page: https://discord.com/developers/applications
- - Click "New Application"
- - Enter anything as the name
- - Click "Create"
- - Go to "Bot"
- - Click "Add Bot"
- - Click "Yes, do it!"
- - Copy the token by clicking on "Copy"
- - Save this token somewhere safe`)
-		fmt.Println()
-		header.Println("Step 2: Invite bot")
-		fmt.Println(` - Visit this page: https://discord.com/developers/applications
- - Go to "OAuth2"
- - In the "Scopes" section, select "bot"
- - At the bottom in "Bot Permissions", select "Administrator"
- - Visit the link generated and add the bot to the server`)
-		fmt.Println()
-		header.Println("Step 3: Enable developer mode")
-		fmt.Println(` - Go to the Discord client or https://discord.com/app
- - Click on the gear icon to open settings
- - Click on "Appearance"
- - Toggle "Developer Mode" to on`)
-		fmt.Println()
-		header.Println("Step 4: Create a Discord server and get a server id")
-		fmt.Println(` - Go to the Discord client or https://discord.com/app
- - Click on the plus icon on the left panel
- - Click on "Create My Own"
- - Right click server icon on the left panel
- - Click "Copy ID"
- - Save this id somewhere`)
-		fmt.Println()
-		header.Println("Step 5: Configure dscli")
-		fmt.Println(` - Run "dscli configure" from command-line ("dscli.exe configure" on Windows)
- - Provide Discord bot token you saved
- - Provide server id you saved
- - Say "yes" to deleting all channels in the server`)
-		fmt.Println()
-		color.New(color.FgGreen, color.Bold).Println("You are ready to use dscli!")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return browser.OpenURL("https://github.com/darenliang/dscli/blob/master/quickstart/README.md")
 	},
 }
 
