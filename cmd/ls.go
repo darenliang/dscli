@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/darenliang/dscli/common"
 	"github.com/spf13/cobra"
+	"sort"
 )
 
 // lsCmd represents the ls command
@@ -31,9 +32,15 @@ func ls(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// list all files
+	var files []string
 	for filename := range fileMap {
-		fmt.Println(filename)
+		files = append(files, filename)
+	}
+
+	sort.Strings(files)
+
+	for _, str := range files {
+		fmt.Println(str)
 	}
 
 	return nil
