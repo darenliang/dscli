@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/darenliang/dscli/common"
 	"github.com/spf13/cobra"
-	"sort"
+	"golang.org/x/text/collate"
+	"golang.org/x/text/language"
 )
 
 // lsCmd represents the ls command
@@ -37,7 +38,7 @@ func ls(cmd *cobra.Command, args []string) error {
 		files = append(files, filename)
 	}
 
-	sort.Strings(files)
+	collate.New(language.English).SortStrings(files)
 
 	for _, str := range files {
 		fmt.Println(str)
