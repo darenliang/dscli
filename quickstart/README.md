@@ -80,8 +80,8 @@ Go to the link copied and invite the bot.
 
 ### Step 5: Configure dscli
 
-**Part of the setup, dscli will delete any remaining channels in the server.**
+**As part of the setup, dscli will delete any remaining channels in the server.**
 
 ```
-dscli -t=<YOUR-DISCORD-BOT-TOKEN-HERE> -i=<YOUR-SERVER-ID> -d
+dscli -t=<YOUR-DISCORD-BOT-TOKEN> -i=<YOUR-SERVER-ID> -d
 ```
