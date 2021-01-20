@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/darenliang/dscli/common"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/collate"
@@ -40,9 +39,7 @@ func ls(cmd *cobra.Command, args []string) error {
 
 	collate.New(language.English).SortStrings(files)
 
-	for _, str := range files {
-		fmt.Println(str)
-	}
+	common.PrintFiles(files)
 
 	return nil
 }
