@@ -16,7 +16,8 @@ func printFileDefault(files []string) {
 	}
 }
 
-// validateRows validates rows
+// validateRows validates rows by getting the sum of all the longest strings in
+// each column and comparing the value with the space left
 func validateRows(table [][]string, leftspace int) bool {
 	m := make(map[int]int)
 	for _, row := range table {
@@ -53,6 +54,8 @@ func PrintFiles(files []string) {
 	}
 
 	// reverse iterate
+	// the iterator i represents the number of columns to test
+	// stop when the iterator reaches 1
 	for i := len(files); i > 1; i-- {
 		// compute whitespace required beforehand
 		// i*2  -> padded sections * 2 spaces
@@ -89,11 +92,13 @@ func PrintFiles(files []string) {
 			table[y] = append(table[y], files[j])
 		}
 
+		// validate table so that it can fit in the calculated leftspace
 		if !validateRows(table, leftspace) {
 			continue
 		}
 
 		// use tabwriter making use of the Elastic Tabstops algorithm
+		// the columns are padded with at least 2 spaces
 		writer := tabwriter.NewWriter(os.Stdout, 1, 0, 2, ' ', 0)
 		for _, row := range table {
 			fmt.Fprintln(writer, strings.Join(row, "\t")+"\t")

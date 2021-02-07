@@ -13,18 +13,16 @@ func DecodeFilename(filename string) (string, error) {
 	filename = strings.ToUpper(filename)
 
 	// add padding if necessary
-	padding := ""
 	switch len(filename) % 8 {
 	case 2:
-		padding = "======"
+		filename += "======"
 	case 4:
-		padding = "===="
+		filename += "===="
 	case 5:
-		padding = "==="
+		filename += "==="
 	case 7:
-		padding = "=="
+		filename += "=="
 	}
-	filename += padding
 
 	// decode string
 	bytes, err := base32.StdEncoding.DecodeString(filename)

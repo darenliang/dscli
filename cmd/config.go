@@ -61,7 +61,7 @@ The server ID will be used to write files to a Discord server.`,
 	// get input if any of the other flags aren't set
 	if cmd.Flag("token").Value.String() == "" || cmd.Flag("id").Value.String() == "" {
 		deleteChannels = false
-		fmt.Println("The server must have no existing channels when you first dscli.")
+		fmt.Println("The server must have no existing channels when you first use dscli.")
 		fmt.Println()
 		color.New(color.FgYellow, color.Bold).Print("Delete all channels in server? [y/N]: ")
 		reader := bufio.NewReader(os.Stdin)
@@ -92,7 +92,8 @@ The server ID will be used to write files to a Discord server.`,
 		color.Green("All channels deleted")
 	} else {
 		color.Yellow(`Channels are not deleted.
-Note that you must delete all channels before you can start using dscli.`)
+Note that you must delete all channels before you can start using dscli.
+Not doing so will result in a server that has an invalid state.`)
 	}
 	fmt.Println()
 

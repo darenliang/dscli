@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// promptColor is yellow and bold
 var promptColor = color.New(color.FgYellow, color.Bold)
 
 // SetConfigVal sets value to key if value exists
