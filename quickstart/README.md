@@ -34,54 +34,26 @@ Right-click on the server icon and click on "Copy ID".
 
 **Save the server ID.**
 
-### Step 3: Create a Discord bot
+### Step 3: Get your own token
 
-Go to https://discord.com/developers/applications.
+> Automating user accounts is technically against TOS, use at your own risk.
 
-Click on "New Application".
+Press **Ctrl+Shift+I** (⌘⌥I on Mac) on Discord to show developer tools.
 
-![](images/3.1.png)
+Navigate to the **Application** tab.
 
-Enter anything as the Discord bot name and click on "Create".
+Select **Local Storage** > **https://discordapp.com** on the left.
 
-![](images/3.2.png)
+Press **Ctrl+R** (⌘R) to reload.
 
-Go to "Bot" and click on "Add Bot".
+Find **token** at the bottom and copy the value.
 
-![](images/3.3.png)
+![](images/3.1.gif)
 
-Click on "Yes, do it!".
-
-![](images/3.4.png)
-
-Click on "Copy".
-
-![](images/3.5.png)
-
-**Save the Discord bot token.**
-
-### Step 4: Invite the Discord bot to the server
-
-Go to https://discord.com/developers/applications.
-
-Select the application, go to "OAuth2" and click on "bot" under "SCOPES".
-
-![](images/4.1.png)
-
-Under "SCOPES" and in "BOT PERMISSIONS", click on "Administrator".
-
-Click on "Copy".
-
-![](images/4.2.png)
-
-Go to the link copied and invite the bot.
-
-![](images/4.3.png)
-
-### Step 5: Configure dscli
+### Step 4: Configure dscli
 
 **As part of the setup, dscli will delete any remaining channels in the server.**
 
 ```
-dscli -t=<YOUR-DISCORD-BOT-TOKEN> -i=<YOUR-SERVER-ID> -d
+dscli -t=<YOUR-DISCORD-TOKEN> -i=<YOUR-SERVER-ID> -d
 ```

@@ -10,10 +10,10 @@ import (
 func GetDiscordSession() (*discordgo.Session, *discordgo.Guild, []*discordgo.Channel, error) {
 	token, ok := viper.Get("token").(string)
 	if !ok {
-		return nil, nil, nil, errors.New("invalid Discord bot token config")
+		return nil, nil, nil, errors.New("invalid Discord user token config")
 	}
 
-	session, err := discordgo.New("Bot " + token)
+	session, err := discordgo.New(token)
 	if err != nil {
 		return nil, nil, nil, errors.New("discord session: " + err.Error())
 	}

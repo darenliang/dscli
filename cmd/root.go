@@ -20,8 +20,8 @@ var rootCmd = &cobra.Command{
 	Long: `Dscli (Discord store command-line interface) is a CLI application to store
 files on Discord.
 
-While this is not a self bot, it probably does something that Discord doesn't
-like. Proceed with caution.`,
+Dscli probably does something that Discord doesn't like (aka storing huge
+amounts of files). Proceed with caution.`,
 	Version: common.Version,
 }
 

@@ -8,8 +8,7 @@ Dscli (Discord store CLI) provides a way to store files with no size restriction
 ## Discord Requirements
 
 * Empty Discord server
-* Invited Discord bot that has permissions to manage servers
-* You'll need the Discord bot token and the server id
+* You'll need a user token and the server id
 
 ## Installation
 
