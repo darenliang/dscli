@@ -70,14 +70,20 @@ dscli rm <remote file>
 
 Ubuntu 18.04.5 LTS on Gigabit internet
 
-|                 | 10 MB         | 100 MB        | 1000 MB       |
-| --------------- | ------------- | ------------- | ------------- |
-| Upload          | 18.161 MB/s   | 7.760 MB/s    | 6.352 MB/s    |
-| Download (cold) | 23.878 MB/s   | 32.895 MB/s   | 32.976 MB/s   |
-| Download (warm) | 57.061 MB/s   | 74.972 MB/s   | 75.638 MB/s   |
+Please take these numbers with a grain of salt.
 
-* cold: Initial download
-* warm: Later downloads
+|                     | 10 MB         | 100 MB        | 1000 MB       |
+| ------------------- | ------------- | ------------- | ------------- |
+| Upload              | 18.161 MB/s   | 7.760 MB/s    | 6.352 MB/s    |
+| Upload Nitro        | 22.450 MB/s   | 22.640 MB/s   | 20.381 MB/s   |
+| Download Cold       | 23.878 MB/s   | 32.895 MB/s   | 32.976 MB/s   |
+| Download Cold Nitro | 22.586 MB/s   | 39.553 MB/s   | 34.811 MB/s   |
+| Download Warm       | 57.061 MB/s   | 74.972 MB/s   | 75.638 MB/s   |
+| Download Warm Nitro | 65.748 MB/s   | 78.645 MB/s   | 69.352 MB/s   |
+
+* Cold: Initial download
+* Warm: Later downloads
+* Nitro: Discord Nitro
 
 ## Limitations
 
@@ -88,7 +94,9 @@ Ubuntu 18.04.5 LTS on Gigabit internet
 * No file appending or editing
 * File number limit of 500 (max number of channels)
 * Subject to Discord rate limits (5 anything per 5 seconds per server)
-    * 8 MB x 5 / 5s = 8 MB/s (theoretical sustained upload speed)
+    * 8 MB x 5 / 5s = 8 MB/s (theoretical sustained upload speed for non-Nitro users)
+    * 50 MB x 5 / 5s = 50 MB/s (theoretical sustained upload speed for Nitro classic users)
+    * 100 MB x 5 / 5s = 100 MB/s (theoretical sustained upload speed for Nitro users)
 
 ## License
 
