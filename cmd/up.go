@@ -80,8 +80,14 @@ func up(cmd *cobra.Command, args []string) error {
 		return errors.New("cannot create remote file: " + err.Error())
 	}
 
+	// get max discord file size
+	maxDiscordFileSize, err := common.GetMaxFileSizeUpload(session, guild)
+	if err != nil {
+		return nil
+	}
+
 	// setup buffer with max discord file size
-	buf := make([]byte, common.MaxDiscordFileSize)
+	buf := make([]byte, maxDiscordFileSize)
 
 	// get size of local file
 	stat, err := localFile.Stat()
@@ -120,7 +126,7 @@ func up(cmd *cobra.Command, args []string) error {
 		}
 
 		// exit loop if EOF
-		if length < common.MaxDiscordFileSize {
+		if length < maxDiscordFileSize {
 			break
 		}
 	}
