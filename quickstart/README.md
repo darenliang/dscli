@@ -55,5 +55,11 @@ Find **token** at the bottom and copy the value.
 **As part of the setup, dscli will delete any remaining channels in the server.**
 
 ```
-dscli -t=<YOUR-DISCORD-TOKEN> -i=<YOUR-SERVER-ID> -d
+dscli config -t=<YOUR-DISCORD-TOKEN> -i=<YOUR-SERVER-ID> -d
+```
+
+For configuring dscli interactively:
+
+```
+dscli config
 ```
