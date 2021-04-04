@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/darenliang/dscli/common"
 	"github.com/schollz/progressbar/v3"
@@ -12,6 +13,8 @@ import (
 	"path/filepath"
 	"strconv"
 )
+
+var upDebug bool
 
 // upCmd represents the up command
 var upCmd = &cobra.Command{
@@ -29,6 +32,8 @@ var upCmd = &cobra.Command{
 }
 
 func init() {
+	upCmd.Flags().BoolVarP(&upDebug, "debug", "d", false, "debug mode: <total bytes> <bytes uploaded>")
+
 	rootCmd.AddCommand(upCmd)
 }
 
@@ -97,11 +102,15 @@ func up(cmd *cobra.Command, args []string) error {
 	size := stat.Size()
 	sizeStr := strconv.Itoa(int(size))
 
-	// init progress bar
-	bar := progressbar.DefaultBytes(
-		size,
-		"Uploading "+localBase,
-	)
+	var bar *progressbar.ProgressBar
+
+	if !upDebug {
+		// init progress bar
+		bar = progressbar.DefaultBytes(
+			size,
+			"Uploading "+localBase,
+		)
+	}
 
 	first := true
 	for {
@@ -111,11 +120,19 @@ func up(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
+		var reader io.Reader
+
+		if !upDebug {
+			reader = io.TeeReader(bytes.NewReader(buf[:length]), bar)
+		} else {
+			reader = bytes.NewReader(buf[:length])
+		}
+
 		msg := &discordgo.MessageSend{
 			Files: []*discordgo.File{
 				{
 					Name:   sizeStr,
-					Reader: io.TeeReader(bytes.NewReader(buf[:length]), bar),
+					Reader: reader,
 				},
 			},
 		}
@@ -124,6 +141,14 @@ func up(cmd *cobra.Command, args []string) error {
 		message, err := session.ChannelMessageSendComplex(channel.ID, msg)
 		if err != nil {
 			return err
+		}
+
+		if upDebug {
+			offset, err := localFile.Seek(0, io.SeekCurrent)
+			if err != nil {
+				return err
+			}
+			fmt.Printf("%d %d \n", size, offset)
 		}
 
 		if first {

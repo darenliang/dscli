@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/darenliang/dscli/common"
 	"github.com/schollz/progressbar/v3"
@@ -10,6 +11,8 @@ import (
 	"os"
 	"strconv"
 )
+
+var dlDebug bool
 
 // dlCmd represents the dl command
 var dlCmd = &cobra.Command{
@@ -27,6 +30,8 @@ var dlCmd = &cobra.Command{
 }
 
 func init() {
+	dlCmd.Flags().BoolVarP(&dlDebug, "debug", "d", false, "debug mode: <total bytes> <bytes downloaded>")
+
 	rootCmd.AddCommand(dlCmd)
 }
 
@@ -66,7 +71,13 @@ func dl(cmd *cobra.Command, args []string) error {
 	defer localFile.Close()
 
 	var msgs []*discordgo.Message
+
 	var bar *progressbar.ProgressBar
+
+	// used for progress bar and debug modes
+	filesize := 0
+	progress := 0
+
 	currMsgID := "0"
 	first := true
 
@@ -94,15 +105,17 @@ func dl(cmd *cobra.Command, args []string) error {
 			if first {
 				sizeStr := msgs[i].Attachments[0].Filename
 
-				size, err := strconv.Atoi(sizeStr)
+				filesize, err = strconv.Atoi(sizeStr)
 				if err != nil {
 					return err
 				}
 
-				bar = progressbar.DefaultBytes(
-					int64(size),
-					"Downloading "+remote,
-				)
+				if !dlDebug {
+					bar = progressbar.DefaultBytes(
+						int64(filesize),
+						"Downloading "+remote,
+					)
+				}
 
 				first = false
 			}
@@ -114,9 +127,18 @@ func dl(cmd *cobra.Command, args []string) error {
 			}
 
 			// write chunk to local file
-			_, err = io.Copy(io.MultiWriter(localFile, bar), resp.Body)
-			if err != nil {
-				return err
+			if !dlDebug {
+				_, err = io.Copy(io.MultiWriter(localFile, bar), resp.Body)
+				if err != nil {
+					return err
+				}
+			} else {
+				written, err := io.Copy(localFile, resp.Body)
+				if err != nil {
+					return err
+				}
+				progress += int(written)
+				fmt.Printf("%d %d \n", filesize, progress)
 			}
 
 			// close response
