@@ -1,11 +1,15 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/darenliang/dscli/common"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/collate"
 	"golang.org/x/text/language"
+	"time"
 )
+
+var listView bool
 
 // lsCmd represents the ls command
 var lsCmd = &cobra.Command{
@@ -16,6 +20,8 @@ var lsCmd = &cobra.Command{
 }
 
 func init() {
+	lsCmd.Flags().BoolVarP(&listView, "list", "l", false, "show list with date created timestamp in the format \"<unix timestamp> <filename>\"")
+
 	rootCmd.AddCommand(lsCmd)
 }
 
@@ -39,7 +45,18 @@ func ls(cmd *cobra.Command, args []string) error {
 
 	collate.New(language.English).SortStrings(files)
 
-	common.PrintFiles(files)
+	if !listView {
+		common.PrintFiles(files)
+	} else {
+		for _, filename := range files {
+			// ignore error to prevent dscli from locking up
+			timestamp, err := fileMap[filename].LastPinTimestamp.Parse()
+			if err != nil {
+				timestamp = time.Unix(0, 0)
+			}
+			fmt.Printf("%d %s\n", timestamp.Unix(), filename)
+		}
+	}
 
 	return nil
 }

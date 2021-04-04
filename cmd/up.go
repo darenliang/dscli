@@ -103,6 +103,7 @@ func up(cmd *cobra.Command, args []string) error {
 		"Uploading "+localBase,
 	)
 
+	first := true
 	for {
 		// read chunk
 		length, err := localFile.Read(buf)
@@ -120,9 +121,15 @@ func up(cmd *cobra.Command, args []string) error {
 		}
 
 		// send chunk
-		_, err = session.ChannelMessageSendComplex(channel.ID, msg)
+		message, err := session.ChannelMessageSendComplex(channel.ID, msg)
 		if err != nil {
 			return err
+		}
+
+		if first {
+			// if pin fails, ignore
+			_ = session.ChannelMessagePin(message.ChannelID, message.ID)
+			first = false
 		}
 
 		// exit loop if EOF

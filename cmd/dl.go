@@ -86,6 +86,10 @@ func dl(cmd *cobra.Command, args []string) error {
 		for i := len(msgs) - 1; i >= 0; i-- {
 			currMsgID = msgs[i].ID
 
+			if len(msgs[i].Attachments) < 1 {
+				continue
+			}
+
 			// on first time, init progressbar with file size
 			if first {
 				sizeStr := msgs[i].Attachments[0].Filename
