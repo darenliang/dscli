@@ -102,6 +102,13 @@ func up(cmd *cobra.Command, args []string) error {
 	size := stat.Size()
 	sizeStr := strconv.Itoa(int(size))
 
+	// set channel topic to filesize
+	channelSettings := &discordgo.ChannelEdit{
+		Topic: sizeStr,
+	}
+	// ignore if errored since it is not critical
+	_, _ = session.ChannelEditComplex(channel.ID, channelSettings)
+
 	var bar *progressbar.ProgressBar
 
 	if !upDebug {

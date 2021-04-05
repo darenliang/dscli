@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/text/collate"
 	"golang.org/x/text/language"
+	"strconv"
 	"time"
 )
 
@@ -20,7 +21,7 @@ var lsCmd = &cobra.Command{
 }
 
 func init() {
-	lsCmd.Flags().BoolVarP(&listView, "list", "l", false, "show list with date created timestamp in the format \"<unix timestamp> <filename>\"")
+	lsCmd.Flags().BoolVarP(&listView, "list", "l", false, "show list of files with filesize and date created timestamp in the format \"<filesize> <unix timestamp> <filename>\"")
 
 	rootCmd.AddCommand(lsCmd)
 }
@@ -49,12 +50,17 @@ func ls(cmd *cobra.Command, args []string) error {
 		common.PrintFiles(files)
 	} else {
 		for _, filename := range files {
+			channel := fileMap[filename]
 			// ignore error to prevent dscli from locking up
-			timestamp, err := fileMap[filename].LastPinTimestamp.Parse()
+			timestamp, err := channel.LastPinTimestamp.Parse()
 			if err != nil {
 				timestamp = time.Unix(0, 0)
 			}
-			fmt.Printf("%d %s\n", timestamp.Unix(), filename)
+			filesize, err := strconv.ParseUint(channel.Topic, 10, 64)
+			if err != nil {
+				filesize = 0
+			}
+			fmt.Printf("%d %d %s\n", filesize, timestamp.Unix(), filename)
 		}
 	}
 
