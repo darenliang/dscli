@@ -142,10 +142,7 @@ func dl(cmd *cobra.Command, args []string) error {
 			}
 
 			// close response
-			err = resp.Body.Close()
-			if err != nil {
-				return err
-			}
+			resp.Body.Close()
 		}
 	}
 

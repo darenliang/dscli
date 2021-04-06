@@ -88,7 +88,7 @@ func up(cmd *cobra.Command, args []string) error {
 	// get max discord file size
 	maxDiscordFileSize, err := common.GetMaxFileSizeUpload(session, guild)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	// setup buffer with max discord file size
