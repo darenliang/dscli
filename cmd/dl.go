@@ -63,6 +63,12 @@ func dl(cmd *cobra.Command, args []string) error {
 		return errors.New(remote + " doesn't exist")
 	}
 
+	// get remote file size
+	remoteSize, err := strconv.ParseUint(channel.Topic, 10, 64)
+	if err != nil {
+		return errors.New(remote + " has a corrupted file size: " + channel.Topic)
+	}
+
 	// create local file
 	localFile, err := os.Create(local)
 	if err != nil {
@@ -73,13 +79,18 @@ func dl(cmd *cobra.Command, args []string) error {
 	var msgs []*discordgo.Message
 
 	var bar *progressbar.ProgressBar
+	if !dlDebug {
+		bar = progressbar.DefaultBytes(
+			int64(remoteSize),
+			"Downloading "+remote,
+		)
+	}
 
 	// used for progress bar and debug modes
 	filesize := 0
 	progress := 0
 
 	currMsgID := "0"
-	first := true
 
 	// do-while
 	for ok := true; ok; ok = len(msgs) == common.MaxDiscordMessageRequest {
@@ -99,25 +110,6 @@ func dl(cmd *cobra.Command, args []string) error {
 
 			if len(msgs[i].Attachments) < 1 {
 				continue
-			}
-
-			// on first time, init progressbar with file size
-			if first {
-				sizeStr := msgs[i].Attachments[0].Filename
-
-				filesize, err = strconv.Atoi(sizeStr)
-				if err != nil {
-					return err
-				}
-
-				if !dlDebug {
-					bar = progressbar.DefaultBytes(
-						int64(filesize),
-						"Downloading "+remote,
-					)
-				}
-
-				first = false
 			}
 
 			// get file response

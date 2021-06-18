@@ -1,14 +1,14 @@
 # dscli: A command-line tool for storing files on Discord
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/darenliang/dscli)](https://goreportcard.com/report/github.com/darenliang/dscli)
-[![License](https://img.shields.io/github/license/darenliang/dscli)](https://github.com/nikel-api/nikel/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/darenliang/dscli)](https://github.com/darenliang/dscli/blob/master/LICENSE)
 
 Dscli (Discord store CLI) provides a way to store files with no size restrictions.
 
 ## Discord Requirements
 
 * Empty Discord server
-* You'll need a user token and the server id
+* You'll need a user/bot token and the server id
 
 ## Installation
 

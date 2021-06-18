@@ -120,6 +120,8 @@ func up(cmd *cobra.Command, args []string) error {
 	}
 
 	first := true
+	part := 1
+
 	for {
 		// read chunk
 		length, err := localFile.Read(buf)
@@ -138,11 +140,13 @@ func up(cmd *cobra.Command, args []string) error {
 		msg := &discordgo.MessageSend{
 			Files: []*discordgo.File{
 				{
-					Name:   sizeStr,
+					Name:   strconv.Itoa(part),
 					Reader: reader,
 				},
 			},
 		}
+
+		part += 1
 
 		// send chunk
 		message, err := session.ChannelMessageSendComplex(channel.ID, msg)

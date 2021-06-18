@@ -34,7 +34,7 @@ Right-click on the server icon and click on "Copy ID".
 
 **Save the server ID.**
 
-### Step 3: Get your own token
+### Step 3: Get your own user token
 
 > Automating user accounts is technically against TOS, use at your own risk.
 
@@ -48,11 +48,15 @@ Press **Ctrl+R** (⌘R) to reload.
 
 Find **token** at the bottom and copy the value.
 
+> You may also get your own bot token instead.
+
 ![](images/3.1.gif)
 
 ### Step 4: Configure dscli
 
 **As part of the setup, dscli will delete any remaining channels in the server.**
+
+> If you are using a bot token, add the "Bot " prefix to the discord token.
 
 ```
 dscli config -t=<YOUR-DISCORD-TOKEN> -i=<YOUR-SERVER-ID> -d
