@@ -100,7 +100,7 @@ func up(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	size := stat.Size()
-	sizeStr := strconv.Itoa(int(size))
+	sizeStr := strconv.FormatInt(size, 10)
 
 	// set channel topic to filesize
 	channelSettings := &discordgo.ChannelEdit{

@@ -25,7 +25,7 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	configCmd.Flags().StringVarP(&token, "token", "t", "", "Discord user token")
+	configCmd.Flags().StringVarP(&token, "token", "t", "", "Discord token")
 	configCmd.Flags().StringVarP(&serverID, "id", "i", "", "Discord server id to upload files")
 	configCmd.Flags().BoolVarP(&deleteChannels, "delete", "d", false, "delete channels from server")
 
@@ -34,13 +34,13 @@ func init() {
 
 // config command handler
 func config(cmd *cobra.Command, args []string) error {
-	// parse Discord user token
+	// parse Discord token
 	err := common.SetConfigVal(
 		"token",
 		cmd.Flag("token").Value.String(),
-		`Discord user token not provided.
+		`Discord token not provided.
 The token will be used to run your account from the CLI app.`,
-		"Please enter a Discord user token: ",
+		"Please enter a Discord token: ",
 	)
 	if err != nil {
 		return err
