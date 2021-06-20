@@ -34,7 +34,7 @@ func init() {
 
 // config command handler
 func config(cmd *cobra.Command, args []string) error {
-	// parse discord user token
+	// parse Discord user token
 	err := common.SetConfigVal(
 		"token",
 		cmd.Flag("token").Value.String(),

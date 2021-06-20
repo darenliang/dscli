@@ -85,13 +85,13 @@ func up(cmd *cobra.Command, args []string) error {
 		return errors.New("cannot create remote file: " + err.Error())
 	}
 
-	// get max discord file size
+	// get max Discord file size
 	maxDiscordFileSize, err := common.GetMaxFileSizeUpload(session, guild)
 	if err != nil {
 		return err
 	}
 
-	// setup buffer with max discord file size
+	// setup buffer with max Discord file size
 	buf := make([]byte, maxDiscordFileSize)
 
 	// get size of local file
@@ -149,9 +149,20 @@ func up(cmd *cobra.Command, args []string) error {
 		part += 1
 
 		// send chunk
-		message, err := session.ChannelMessageSendComplex(channel.ID, msg)
-		if err != nil {
-			return err
+		// retry 5 times because internet can be flaky and Discord sometimes
+		// likes to drop connections
+		var message *discordgo.Message
+		maxUploadTries := 5
+		for i := 0; i < maxUploadTries; i++ {
+			message, err = session.ChannelMessageSendComplex(channel.ID, msg)
+			if err != nil {
+				if i == maxUploadTries-1 {
+					return err
+				} else {
+					continue
+				}
+			}
+			break
 		}
 
 		if upDebug {
