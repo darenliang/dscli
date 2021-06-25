@@ -87,7 +87,6 @@ func dl(cmd *cobra.Command, args []string) error {
 	}
 
 	// used for progress bar and debug modes
-	var filesize int64
 	var progress int64
 
 	currMsgID := "0"
@@ -130,7 +129,7 @@ func dl(cmd *cobra.Command, args []string) error {
 					return err
 				}
 				progress += written
-				fmt.Printf("%d %d \n", filesize, progress)
+				fmt.Printf("%d %d \n", remoteSize, progress)
 			}
 
 			// close response

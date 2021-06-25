@@ -2,7 +2,7 @@ package common
 
 const (
 	// Version is the current dscli app version
-	Version = "1.10.0"
+	Version = "1.11.0"
 
 	// MaxDiscordFileSizeDefault represents the maximum file size in bytes that
 	// an attachment can be for non nitro users
