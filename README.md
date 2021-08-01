@@ -22,12 +22,6 @@ You can also download pre-built binaries for Windows, Linux and MacOS: https://g
 
 ## Quickstart
 
-A complete setup guide can be found [here](https://github.com/darenliang/dscli/blob/master/quickstart/README.md).
-
-```
-dscli quickstart
-```
-
 For User Tokens:
 
 ```
@@ -38,6 +32,12 @@ For Bot Tokens:
 
 ```
 dscli config -t=<YOUR-DISCORD-BOT-TOKEN> -i=<YOUR-SERVER-ID> -b
+```
+
+A complete setup guide (including creating a server and getting user tokens) can be found [here](https://github.com/darenliang/dscli/blob/master/quickstart/README.md) or by using the command:
+
+```
+dscli quickstart
 ```
 
 ## Commands
