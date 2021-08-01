@@ -13,6 +13,7 @@ import (
 
 var (
 	token          string
+	botFlag        bool
 	serverID       string
 	deleteChannels bool
 )
@@ -26,6 +27,7 @@ var configCmd = &cobra.Command{
 
 func init() {
 	configCmd.Flags().StringVarP(&token, "token", "t", "", "Discord token")
+	configCmd.Flags().BoolVarP(&botFlag, "bot", "b", false, "token is for a Discord bot")
 	configCmd.Flags().StringVarP(&serverID, "id", "i", "", "Discord server id to upload files")
 	configCmd.Flags().BoolVarP(&deleteChannels, "delete", "d", false, "delete channels from server")
 
@@ -35,7 +37,7 @@ func init() {
 // config command handler
 func config(cmd *cobra.Command, args []string) error {
 	// parse Discord token
-	err := common.SetConfigVal(
+	parsedToken, err := common.SetConfigVal(
 		"token",
 		cmd.Flag("token").Value.String(),
 		`Discord token not provided.
@@ -46,8 +48,27 @@ The token will be used to run your account from the CLI app.`,
 		return err
 	}
 
+	if cmd.Flag("token").Value.String() == "" {
+		botFlag = false
+		color.New(color.FgYellow, color.Bold).Print("Is the provided token a bot token? [y/N]: ")
+		reader := bufio.NewReader(os.Stdin)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return err
+		}
+		choice := strings.ToLower(strings.TrimSpace(input))
+		fmt.Println()
+		if choice == "y" || choice == "yes" {
+			botFlag = true
+		}
+	}
+
+	if botFlag {
+		viper.Set("token", "Bot "+parsedToken)
+	}
+
 	// parse server id
-	err = common.SetConfigVal(
+	_, err = common.SetConfigVal(
 		"id",
 		cmd.Flag("id").Value.String(),
 		`Server ID not provided.

@@ -54,15 +54,24 @@ Find **token** at the bottom and copy the value.
 
 ### Step 4: Configure dscli
 
-**As part of the setup, dscli will delete any remaining channels in the server.**
+**As part of the setup, dscli will delete any remaining channels in the
+server.**
 
-> If you are using a bot token, add the "Bot " prefix to the Discord token.
+#### For User Tokens
 
 ```
 dscli config -t=<YOUR-DISCORD-TOKEN> -i=<YOUR-SERVER-ID> -d
 ```
 
-For configuring dscli interactively:
+#### For Bot Tokens (Two ways)
+
+```
+dscli config -t="Bot <YOUR-DISCORD-BOT-TOKEN>" -i=<YOUR-SERVER-ID> -d
+
+dscli config -t=<YOUR-DISCORD-BOT-TOKEN> -i=<YOUR-SERVER-ID> -d -b
+```
+
+#### For configuring dscli interactively:
 
 ```
 dscli config

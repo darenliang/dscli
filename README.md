@@ -5,7 +5,7 @@
 
 Dscli (Discord store CLI) provides a way to store files with no size restrictions.
 
-## Discord Requirements
+## Requirements
 
 * Empty Discord server
 * You'll need a user/bot token and the server id
@@ -13,55 +13,83 @@ Dscli (Discord store CLI) provides a way to store files with no size restriction
 ## Installation
 
 Make sure you have go installed (version 1.13+ is required).
+
 ```
 go get -u github.com/darenliang/dscli
 ```
 
+You can also download pre-built binaries for Windows, Linux and MacOS: https://github.com/darenliang/dscli/releases
+
 ## Quickstart
 
 A complete setup guide can be found [here](https://github.com/darenliang/dscli/blob/master/quickstart/README.md).
+
 ```
 dscli quickstart
+```
+
+For User Tokens:
+
+```
+dscli config -t=<YOUR-DISCORD-TOKEN> -i=<YOUR-SERVER-ID>
+```
+
+For Bot Tokens:
+
+```
+dscli config -t=<YOUR-DISCORD-BOT-TOKEN> -i=<YOUR-SERVER-ID> -b
 ```
 
 ## Commands
 
 #### Configure application
+
 ```
 dscli config
 ```
 
 #### List files
+
 ```
 dscli ls
 ```
 
 #### Upload file
+
 Use local filename
+
 ```
 dscli up <local file>
 ```
+
 Specify remote filename
+
 ```
 dscli up <local file> <remote file>
 ```
 
 #### Download file
+
 Use remote filename
+
 ```
 dscli dl <remote file>
 ```
+
 Specify local filename
+
 ```
 dscli dl <remote file> <local file>
 ```
 
 #### Move file
+
 ```
 dscli mv <source file> <destination file>
 ```
 
 #### Remove file
+
 ```
 dscli rm <remote file>
 ```
