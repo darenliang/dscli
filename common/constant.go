@@ -1,8 +1,10 @@
 package common
 
+// All constants below maybe subject to change.
+
 const (
 	// Version is the current dscli app version
-	Version = "1.11.1"
+	Version = "1.12.0"
 
 	// MaxDiscordFileSizeDefault represents the maximum file size in bytes that
 	// an attachment can be for non nitro users
@@ -18,4 +20,7 @@ const (
 
 	// MaxDiscordMessageRequest is the maximum number of messages you can query
 	MaxDiscordMessageRequest = 100
+
+	// MaxDiscordChannels is the maximum number of channels you can have
+	MaxDiscordChannels = 500
 )

@@ -50,6 +50,16 @@ func up(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	// check if max Discord channel limit is reached
+	if len(fileMap) >= common.MaxDiscordChannels {
+		return errors.New(
+			fmt.Sprintf(
+				"max Discord channel limit of %d is reached",
+				common.MaxDiscordChannels,
+			),
+		)
+	}
+
 	local := args[0] // local filename
 
 	// open local file to upload

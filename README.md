@@ -94,6 +94,16 @@ dscli mv <source file> <destination file>
 dscli rm <remote file>
 ```
 
+#### Statistics
+
+* Number of files stored
+* Total size stored
+* Upload chunk size
+
+```
+dscli stats
+```
+
 ## Quick Benchmarks
 
 Ubuntu 18.04.5 LTS on Gigabit internet
