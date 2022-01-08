@@ -162,7 +162,7 @@ func up(cmd *cobra.Command, args []string) error {
 		// retry 5 times because internet can be flaky and Discord sometimes
 		// likes to drop connections
 		var message *discordgo.Message
-		maxUploadTries := 5
+		maxUploadTries := 10
 		for i := 0; i < maxUploadTries; i++ {
 			message, err = session.ChannelMessageSendComplex(channel.ID, msg)
 			if err != nil {
@@ -185,6 +185,9 @@ func up(cmd *cobra.Command, args []string) error {
 
 		if first {
 			// if pin fails, ignore
+			// the reason why we pin is because Discord exposes the timestamp
+			// of the last pin in channel which is useful for obtaining the
+			// file's creation date
 			_ = session.ChannelMessagePin(message.ChannelID, message.ID)
 			first = false
 		}
