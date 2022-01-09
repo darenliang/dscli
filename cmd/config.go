@@ -49,8 +49,8 @@ The token will be used to run your account from the CLI app.`,
 	}
 
 	if cmd.Flag("token").Value.String() == "" {
-		botFlag = false
-		color.New(color.FgYellow, color.Bold).Print("Is the provided token a bot token? [y/N]: ")
+		botFlag = true
+		color.New(color.FgYellow, color.Bold).Print("Is the provided token a bot token? [Y/n]: ")
 		reader := bufio.NewReader(os.Stdin)
 		input, err := reader.ReadString('\n')
 		if err != nil {
@@ -58,8 +58,8 @@ The token will be used to run your account from the CLI app.`,
 		}
 		choice := strings.ToLower(strings.TrimSpace(input))
 		fmt.Println()
-		if choice == "y" || choice == "yes" {
-			botFlag = true
+		if choice == "n" || choice == "no" {
+			botFlag = false
 		}
 	}
 
