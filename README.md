@@ -136,6 +136,11 @@ Please take these numbers with a grain of salt.
     * 50 MB x 5 / 5s = 50 MB/s (theoretical sustained upload speed for Nitro classic users)
     * 100 MB x 5 / 5s = 100 MB/s (theoretical sustained upload speed for Nitro users)
 
+## Possible improvements
+
+* FUSE integration
+* Exposing an API for other libraries/programs to use
+
 ## License
 
 [MIT](https://github.com/darenliang/dscli/blob/master/LICENSE)
