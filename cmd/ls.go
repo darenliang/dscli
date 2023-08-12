@@ -53,9 +53,9 @@ func ls(cmd *cobra.Command, args []string) error {
 			channel := fileMap[filename]
 			// ignore error to prevent dscli from locking up
 			// obtain file creation date from last pin timestamp in a channel
-			timestamp, err := channel.LastPinTimestamp.Parse()
-			if err != nil {
-				timestamp = time.Unix(0, 0)
+			timestamp := time.Unix(0, 0)
+			if channel.LastPinTimestamp != nil {
+				timestamp = *channel.LastPinTimestamp
 			}
 			filesize, err := strconv.ParseUint(channel.Topic, 10, 64)
 			if err != nil {

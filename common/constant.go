@@ -4,19 +4,19 @@ package common
 
 const (
 	// Version is the current dscli app version
-	Version = "1.12.0"
+	Version = "1.13.0"
 
 	// MaxDiscordFileSizeDefault represents the maximum file size in bytes that
 	// an attachment can be for non nitro users
-	MaxDiscordFileSizeDefault = 8388119
+	MaxDiscordFileSizeDefault = 26214400
 
 	// MaxDiscordFileSizeNitroClassic represents the maximum file size in bytes that
 	// an attachment can be for nitro classic users
-	MaxDiscordFileSizeNitroClassic = 52428308
+	MaxDiscordFileSizeNitroClassic = 52428800
 
 	// MaxDiscordFileSizeNitro represents the maximum file size in bytes that
 	// an attachment can be for nitro users
-	MaxDiscordFileSizeNitro = 104856616
+	MaxDiscordFileSizeNitro = 524288000
 
 	// MaxDiscordMessageRequest is the maximum number of messages you can query
 	MaxDiscordMessageRequest = 100

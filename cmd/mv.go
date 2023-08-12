@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"github.com/bwmarrin/discordgo"
 	"github.com/darenliang/dscli/common"
 	"github.com/spf13/cobra"
 )
@@ -54,7 +55,7 @@ func mv(cmd *cobra.Command, args []string) error {
 			return errors.New(newFilename + " already exists on Discord")
 		}
 		// rename file (via channel rename)
-		_, err = session.ChannelEdit(channel.ID, encodedNewFilename)
+		_, err = session.ChannelEdit(channel.ID, &discordgo.ChannelEdit{Name: encodedNewFilename})
 		if err != nil {
 			return errors.New("cannot move file: " + err.Error())
 		}

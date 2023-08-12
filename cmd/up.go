@@ -14,7 +14,10 @@ import (
 	"strconv"
 )
 
-var upDebug bool
+var (
+	upDebug  bool
+	upResume bool
+)
 
 // upCmd represents the up command
 var upCmd = &cobra.Command{
@@ -33,6 +36,7 @@ var upCmd = &cobra.Command{
 
 func init() {
 	upCmd.Flags().BoolVarP(&upDebug, "debug", "d", false, "debug mode: <total bytes> <bytes uploaded>")
+	upCmd.Flags().BoolVarP(&upResume, "resume", "r", false, "resume upload")
 
 	rootCmd.AddCommand(upCmd)
 }
@@ -51,7 +55,7 @@ func up(cmd *cobra.Command, args []string) error {
 	}
 
 	// check if max Discord channel limit is reached
-	if len(fileMap) >= common.MaxDiscordChannels {
+	if !upResume && len(fileMap) >= common.MaxDiscordChannels {
 		return errors.New(
 			fmt.Sprintf(
 				"max Discord channel limit of %d is reached",
@@ -79,30 +83,11 @@ func up(cmd *cobra.Command, args []string) error {
 	}
 
 	// remote filename already exists
-	if _, ok := fileMap[remote]; ok {
+	if _, ok := fileMap[remote]; ok && !upResume {
 		return errors.New(remote + " already exists on Discord")
+	} else if !ok && upResume {
+		return errors.New(remote + " does not exist on Discord")
 	}
-
-	// encode remote filename
-	encodedRemote, err := common.EncodeFilename(remote)
-	if err != nil {
-		return err
-	}
-
-	// create channel for file
-	channel, err := session.GuildChannelCreate(guild.ID, encodedRemote, discordgo.ChannelTypeGuildText)
-	if err != nil {
-		return errors.New("cannot create remote file: " + err.Error())
-	}
-
-	// get max Discord file size
-	maxDiscordFileSize, err := common.GetMaxFileSizeUpload(session, guild)
-	if err != nil {
-		return err
-	}
-
-	// setup buffer with max Discord file size
-	buf := make([]byte, maxDiscordFileSize)
 
 	// get size of local file
 	stat, err := localFile.Stat()
@@ -112,12 +97,93 @@ func up(cmd *cobra.Command, args []string) error {
 	size := stat.Size()
 	sizeStr := strconv.FormatInt(size, 10)
 
-	// set channel topic to filesize
-	channelSettings := &discordgo.ChannelEdit{
-		Topic: sizeStr,
+	// get max Discord file size
+	maxDiscordFileSize, err := common.GetMaxFileSizeUpload(session, guild)
+	if err != nil {
+		return err
 	}
-	// ignore if errored since it is not critical
-	_, _ = session.ChannelEditComplex(channel.ID, channelSettings)
+
+	var channel *discordgo.Channel
+	blockNumber := 0
+
+	if upResume {
+		channel = fileMap[remote]
+
+		if channel.Topic != sizeStr {
+			return errors.New("remote file size does not match local file size")
+		}
+
+		msgs, err := session.ChannelMessages(channel.ID, 1, "", "0", "")
+		if err != nil {
+			return err
+		}
+
+		if len(msgs) == 0 || len(msgs[0].Attachments) == 0 {
+			return errors.New("cannot infer block size")
+		}
+
+		if msgs[0].Attachments[0].Size > maxDiscordFileSize {
+			return errors.New(fmt.Sprintf(
+				"inferred block size %d is larger than the largest permitted block size %d",
+				msgs[0].Attachments[0].Size,
+				maxDiscordFileSize,
+			))
+		}
+
+		maxDiscordFileSize = msgs[0].Attachments[0].Size
+
+		msgs, err = session.ChannelMessages(channel.ID, 2, "", "", "")
+		if err != nil {
+			return err
+		}
+
+		for _, msg := range msgs {
+			if len(msg.Attachments) == 0 {
+				continue
+			}
+			if msg.Attachments[0].Size != maxDiscordFileSize {
+				return errors.New("complete upload inferred from incomplete last block")
+			}
+			blockNumber, err = strconv.Atoi(msg.Attachments[0].Filename)
+			if err != nil {
+				return err
+			}
+			break
+		}
+
+		if int64(blockNumber)*int64(maxDiscordFileSize) == size {
+			return errors.New("upload is already complete")
+		}
+
+	} else {
+		// encode remote filename
+		encodedRemote, err := common.EncodeFilename(remote)
+		if err != nil {
+			return err
+		}
+
+		// create channel for file
+		channel, err = session.GuildChannelCreate(guild.ID, encodedRemote, discordgo.ChannelTypeGuildText)
+		if err != nil {
+			return errors.New("cannot create remote file: " + err.Error())
+		}
+
+		// set channel topic to filesize
+		channelSettings := &discordgo.ChannelEdit{
+			Topic: sizeStr,
+		}
+		// ignore if errored since it is not critical
+		_, _ = session.ChannelEdit(channel.ID, channelSettings)
+	}
+
+	// seek to block number
+	_, err = localFile.Seek(int64(blockNumber)*int64(maxDiscordFileSize), io.SeekStart)
+	if err != nil {
+		return err
+	}
+
+	// setup buffer with max Discord file size
+	buf := make([]byte, maxDiscordFileSize)
 
 	var bar *progressbar.ProgressBar
 
@@ -127,12 +193,17 @@ func up(cmd *cobra.Command, args []string) error {
 			size,
 			"Uploading "+localBase,
 		)
+		err := bar.Add(blockNumber * maxDiscordFileSize)
+		if err != nil {
+			return err
+		}
 	}
 
 	first := true
-	part := 1
 
 	for {
+		blockNumber += 1
+
 		// read chunk
 		length, err := localFile.Read(buf)
 		if err != nil {
@@ -150,13 +221,11 @@ func up(cmd *cobra.Command, args []string) error {
 		msg := &discordgo.MessageSend{
 			Files: []*discordgo.File{
 				{
-					Name:   strconv.Itoa(part),
+					Name:   strconv.Itoa(blockNumber),
 					Reader: reader,
 				},
 			},
 		}
-
-		part += 1
 
 		// send chunk
 		// retry 5 times because internet can be flaky and Discord sometimes
@@ -183,7 +252,7 @@ func up(cmd *cobra.Command, args []string) error {
 			fmt.Printf("%d %d \n", size, offset)
 		}
 
-		if first {
+		if first && !upResume {
 			// if pin fails, ignore
 			// the reason why we pin is because Discord exposes the timestamp
 			// of the last pin in channel which is useful for obtaining the
